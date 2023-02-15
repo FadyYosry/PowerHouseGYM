@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import *
+# from rest_framework import views
 
 urlpatterns = [
     # Authentication
@@ -10,9 +11,16 @@ urlpatterns = [
     # path('register/', RegisterUser.as_view(), name='register'),
 
     # Gym Members
-    path('members/', list_gym_members.as_view(), name='list_gym_members'),
-    path('members/<int:pk>/', get_gym_member.as_view(), name='member-detail'),
-    path('members/create/', create_gym_member.as_view(), name='member-create'),
-    path('members/update/<int:pk>/', update_gym_member.as_view(), name='member-update'),
-    path('members/delete/<int:pk>/', delete_gym_member.as_view(), name='member-delete'),
+    path('members/', list_gym_members, name='list_gym_members'),
+    path('members/<int:pk>/', get_gym_member, name='member-detail'),
+    path('members/create/', create_gym_member, name='member-create'),
+    path('members/update/<int:pk>/', update_gym_member, name='member-update'),
+    path('members/delete/<int:pk>/', delete_gym_member, name='member-delete'),
+
+    # Add GYM
+    path('GYM/', list_gym, name='list_gym'),
+    path('GYM/<int:pk>/', get_gym, name='GYM-detail'),
+    path('GYM/create/', create_gym, name='GYM-create'),
+    path('GYM/update/<int:pk>/', update_gym, name='GYM-update'),
+    path('GYM/delete/<int:pk>/', delete_gym, name='GYM-delete'),
 ]

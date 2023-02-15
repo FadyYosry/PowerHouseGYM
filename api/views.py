@@ -1,8 +1,10 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Member
-from .serializers import MemberSerializer
+from .models import Member, Gym
+from .serializers import MemberSerializer, GYMSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def create_gym_member(request):
@@ -49,4 +51,56 @@ def get_gym_member(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     serializer = MemberSerializer(member)
+    return Response(serializer.data)
+
+# Viwes for GYM
+
+@api_view(['POST'])
+def create_gym(request):
+    serializer = GYMSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def update_gym(request, pk):
+    try:
+        gym = Gym.objects.get(pk=pk)
+    except Gym.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = GYMSerializer(gym, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def delete_gym(request, pk):
+    try:
+        gym = Gym.objects.get(pk=pk)
+    except Gym.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    gym.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def list_gym(request):
+    gym = Gym.objects.all()
+    serializer = GYMSerializer(gym, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_gym(request, pk):
+    try:
+        gym = Gym.objects.get(pk=pk)
+    except Gym.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = GYMSerializer(gym)
     return Response(serializer.data)
