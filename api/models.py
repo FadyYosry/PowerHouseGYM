@@ -22,13 +22,14 @@ class Gym(models.Model):
 class Member(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    username = models.CharField(max_length=50, unique=True)
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
         ('O', 'Other'),
     ]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=128, blank=False, null=False)
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=200, blank=True, null=True)
