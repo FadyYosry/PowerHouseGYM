@@ -8,7 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.hashers import make_password
+# from django.contrib.auth.hashers import make_password
+from django.shortcuts import get_object_or_404
 
 
 @api_view(['POST'])
@@ -49,12 +50,13 @@ def list_gym_members(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_gym_member(request, pk):
-    try:
-        member = Member.objects.get(pk=pk)
-    except Member.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+def get_gym_member(request, pk=None, username=None):
+    if pk is not None:
+        member = get_object_or_404(Member, pk=pk)
+    elif username is not None:
+        member = get_object_or_404(Member, username=username)
+    else:
+        return Response({'error': 'Either pk or username must be provided'}, status=400)
     serializer = MemberSerializer(member)
     return Response(serializer.data)
 
