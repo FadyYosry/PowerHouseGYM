@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractBaseUser
 
 class Gym(models.Model):
     name = models.CharField(max_length=100)
@@ -19,7 +20,7 @@ class Gym(models.Model):
         return self.name
 
 
-class Member(models.Model):
+class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)

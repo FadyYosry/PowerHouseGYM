@@ -5,6 +5,11 @@ from .models import Member, Gym
 from .serializers import MemberSerializer, GYMSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password
+
 
 @api_view(['POST'])
 def create_gym_member(request):
@@ -53,6 +58,22 @@ def get_gym_member(request, pk):
     serializer = MemberSerializer(member)
     return Response(serializer.data)
 
+@csrf_exempt
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            member = Member.objects.get(username=username)
+        except Member.DoesNotExist:
+            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+        if not member.check_password(password):
+            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+        login(request, member)
+        return JsonResponse({'status': 'success', 'user': member.first_name})
+    else:
+        return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
+        
 # Viwes for GYM
 
 @api_view(['POST'])

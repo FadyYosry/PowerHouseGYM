@@ -16,6 +16,7 @@ urlpatterns = [
     path('members/create/', create_gym_member, name='member-create'),
     path('members/update/<int:pk>/', update_gym_member, name='member-update'),
     path('members/delete/<int:pk>/', delete_gym_member, name='member-delete'),
+    path('login/', login_view, name='login'),
 
     # Add GYM
     path('GYM/', list_gym, name='list_gym'),
