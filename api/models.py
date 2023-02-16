@@ -24,6 +24,8 @@ class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
+    age = models.PositiveIntegerField(blank=True, null=True)
+    height = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
