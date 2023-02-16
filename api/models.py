@@ -3,13 +3,12 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.hashers import make_password
 
 class Gym(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=2, blank=True, null=True)
-    zip_code = models.CharField(max_length=10, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
@@ -23,18 +22,29 @@ class Gym(models.Model):
 class Member(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
+    password = models.CharField(max_length=128, blank=False, null=False)
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=2, blank=True, null=True)
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
+    gym = models.ForeignKey(Gym, on_delete=models.SET('Unknown'))
     membership_start_date = models.DateField()
     membership_end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Hash the password before saving the user object
+        self.password = make_password(self.password)
+        super(Member, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
