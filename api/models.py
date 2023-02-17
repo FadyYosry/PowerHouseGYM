@@ -5,6 +5,8 @@ from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils import timezone
+from django.core.validators import MaxValueValidator, DecimalValidator
 
 class Gym(models.Model):
     name = models.CharField(max_length=100)
@@ -24,8 +26,9 @@ class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
+    USERNAME_FIELD = 'username'
     age = models.PositiveIntegerField(blank=True, null=True)
-    height = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    height = models.DecimalField(max_digits=6, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -48,11 +51,19 @@ class Member(AbstractBaseUser):
     def save(self, *args, **kwargs):
         # Hash the password before saving the user object
         self.password = make_password(self.password)
+        self.updated_at = timezone.now()
         super(Member, self).save(*args, **kwargs)
 
+
+    def created_at_formatted(self):
+        return self.created_at.strftime('%Y-%m-%dT%H:%M:%S')
+
+    def updated_at_formatted(self):
+        return self.updated_at.strftime('%Y-%m-%dT%H:%M:%S')
+    
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-    
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def TokenCreate(sender, instance, created, **kwargs):
     if created:
