@@ -1,5 +1,7 @@
 asgiref==3.6.0
 Django==4.1.7
 djangorestframework==3.14.0
+numpy==1.24.2
+opencv-python==4.7.0.68
 pytz==2022.7.1
 sqlparse==0.4.3
