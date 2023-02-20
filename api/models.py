@@ -47,20 +47,12 @@ class Member(AbstractBaseUser):
     membership_end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+   
     def save(self, *args, **kwargs):
         # Hash the password before saving the user object
         self.password = make_password(self.password)
-        self.updated_at = timezone.now()
         super(Member, self).save(*args, **kwargs)
 
-
-    def created_at_formatted(self):
-        return self.created_at.strftime('%Y-%m-%dT%H:%M:%S')
-
-    def updated_at_formatted(self):
-        return self.updated_at.strftime('%Y-%m-%dT%H:%M:%S')
-    
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 

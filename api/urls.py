@@ -12,9 +12,9 @@ urlpatterns = [
 
     # Gym Members
     path('members/', list_gym_members, name='list_gym_members'),
-    path('members/<int:pk>/', get_gym_member, name='get-member'),
-    path('members/<str:username>/', get_gym_member, name='get-member'),
     path('members/create/', create_gym_member, name='member-create'),
+    path('members/get/<int:pk>/', get_gym_member, name='get-member'),
+    path('members/get/<str:username>/', get_gym_member, name='get-member'),
     path('members/update/<int:pk>/', update_gym_member, name='member-update'),
     path('members/delete/<int:pk>/', delete_gym_member, name='member-delete'),
     path('login/', login_view, name='login'),
