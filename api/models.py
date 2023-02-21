@@ -29,6 +29,8 @@ class Member(AbstractBaseUser):
     USERNAME_FIELD = 'username'
     age = models.PositiveIntegerField(blank=True, null=True)
     height = models.DecimalField(max_digits=6, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
+    weight = models.DecimalField(max_digits=5, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
+    target = models.DecimalField(max_digits=5, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
