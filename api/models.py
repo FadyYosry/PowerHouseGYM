@@ -8,6 +8,22 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, DecimalValidator
 
+class Admin(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128, blank=False, null=False)
+
+    def __str__(self):
+        return f"{self.username}"
+    
+    def connected_gym(self):
+        try:
+            return self.gym.name
+        except Gym.DoesNotExist:
+            return None
+
 class Gym(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
@@ -21,6 +37,9 @@ class Gym(models.Model):
     def __str__(self):
         return self.name
 
+class AdminGym(models.Model):
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
 
 class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
@@ -57,6 +76,10 @@ class Member(AbstractBaseUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+class AdminMember(models.Model):
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE)
+    Member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def TokenCreate(sender, instance, created, **kwargs):
