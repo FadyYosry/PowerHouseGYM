@@ -21,9 +21,9 @@ urlpatterns = [
     path('login/', login_viewV2, name='login2'),
 
     # Add GYM
-    path('GYM/', list_gym, name='list_gym'),
-    path('GYM/<int:pk>/', get_gym, name='GYM-detail'),
-    path('GYM/create/', create_gym, name='GYM-create'),
-    path('GYM/update/<int:pk>/', update_gym, name='GYM-update'),
-    path('GYM/delete/<int:pk>/', delete_gym, name='GYM-delete'),
+    path('gym/', list_gym, name='list_gym'),
+    path('gym/<int:pk>/', get_gym, name='GYM-detail'),
+    path('gym/create/', create_gym, name='GYM-create'),
+    path('gym/update/<int:pk>/', update_gym, name='GYM-update'),
+    path('gym/delete/<int:pk>/', delete_gym, name='GYM-delete'),
 ]
