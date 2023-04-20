@@ -143,7 +143,7 @@ def delete_gym(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     gym.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response({'Status' : 'Deleted successfuly'},status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
