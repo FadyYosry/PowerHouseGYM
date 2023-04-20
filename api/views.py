@@ -79,20 +79,24 @@ def login_view(request):
 @csrf_exempt
 def login_viewV2(request):
     if request.method == 'POST':
-        username_or_email = request.POST.get('username_or_email')  # Update input name to match form field
+        username_or_email = request.POST.get('username_or_email')
         password = request.POST.get('password')
         member = None
 
-        # Check if input is an email address
-        if '@' in username_or_email:
-            try:
-                member = Member.objects.get(email=username_or_email)
-            except Member.DoesNotExist:
-                return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+        if username_or_email is not None:  # Add a check to ensure username_or_email is not None
+            # Check if input is an email address
+            if '@' in username_or_email:
+                try:
+                    member = Member.objects.get(email=username_or_email)
+                except Member.DoesNotExist:
+                    return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
 
         # If input is not an email, lookup by username
         if not member:
-            member = Member.objects.get(username=username_or_email)
+            try:
+                member = Member.objects.get(username=username_or_email)
+            except Member.DoesNotExist:
+                return JsonResponse({'status': 'failed', 'message': 'Invalid credentials username', 'username' : username_or_email})
 
         if not member:
             return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
@@ -105,6 +109,7 @@ def login_viewV2(request):
             return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
     else:
         return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
+
         
 # Viwes for GYM
 
