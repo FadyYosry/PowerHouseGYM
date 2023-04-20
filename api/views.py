@@ -3,14 +3,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Member, Gym
 from .serializers import MemberSerializer, GYMSerializer
+from django.contrib.auth import login
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-# from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-
+from django.contrib.auth import login
 
 @api_view(['POST'])
 def create_gym_member(request):
@@ -73,6 +72,37 @@ def login_view(request):
             return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
         login(request, member)
         return JsonResponse({'status': 'success', 'user': member.first_name})
+    else:
+        return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
+    
+# V2 for login
+@csrf_exempt
+def login_viewV2(request):
+    if request.method == 'POST':
+        username_or_email = request.POST.get('username_or_email')  # Update input name to match form field
+        password = request.POST.get('password')
+        member = None
+
+        # Check if input is an email address
+        if '@' in username_or_email:
+            try:
+                member = Member.objects.get(email=username_or_email)
+            except Member.DoesNotExist:
+                return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+
+        # If input is not an email, lookup by username
+        if not member:
+            member = Member.objects.get(username=username_or_email)
+
+        if not member:
+            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+
+        # If member is found, check password and log in
+        if member.check_password(password):
+            login(request, member)
+            return JsonResponse({'status': 'success', 'user': member.first_name})
+        else:
+            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
     else:
         return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
         

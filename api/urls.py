@@ -17,7 +17,8 @@ urlpatterns = [
     path('members/get/<str:username>/', get_gym_member, name='get-member'),
     path('members/update/<int:pk>/', update_gym_member, name='member-update'),
     path('members/delete/<int:pk>/', delete_gym_member, name='member-delete'),
-    path('login/', login_view, name='login'),
+    # path('login/', login_view, name='login'),
+    path('login/', login_viewV2, name='login2'),
 
     # Add GYM
     path('GYM/', list_gym, name='list_gym'),
