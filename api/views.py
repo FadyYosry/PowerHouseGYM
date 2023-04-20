@@ -37,10 +37,10 @@ def delete_gym_member(request, pk):
     try:
         member = Member.objects.get(pk=pk)
     except Member.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'Status' : 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
     member.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response({'Status' : 'Deleted successfuly'}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def list_gym_members(request):
