@@ -149,4 +149,4 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# ALLOWED_HOSTS = ['192.168.0.171','127.0.0.1','192.168.0.133','192.168.0.147']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','602e-105-38-46-227.ngrok-free.app']
