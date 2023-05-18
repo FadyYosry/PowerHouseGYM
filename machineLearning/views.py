@@ -1,3 +1,5 @@
+from io import BytesIO
+import json
 import cv2
 import os
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse, StreamingHttpResponse
@@ -223,3 +225,24 @@ def stream_camera(request):
         camera_video.release()
 
     return StreamingHttpResponse(stream_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
+
+@csrf_exempt
+def pose_classifier(request):
+    if request.method == "POST":
+        image = request.FILES['image']
+        pose = mp.solutions.pose.Pose()
+        output_image, landmarks = detectPose(image, pose)
+        label = classifyPose(landmarks, output_image)
+
+        # Create a new file object from the image data.
+        file_object = BytesIO()
+        file_object.write(image.read())
+
+        # Return the image data as a JSON response.
+        return HttpResponse(json.dumps({
+            "image": file_object.getvalue(),
+            "label": label
+        }))
+
+    else:
+        return HttpResponse("Invalid request method.")
