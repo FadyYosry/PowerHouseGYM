@@ -82,6 +82,17 @@ WSGI_APPLICATION = 'powerHouseGYM.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'powerGYM',
+#         'USER': 'fady-GYM',
+#         'PASSWORD': 'Security321',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
