@@ -259,7 +259,7 @@ async def classify_pose_real_time2(request):
         pose_video = mp.solutions.pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
 
         # Set up the response headers
-        response = StreamingHttpResponse(generate_frames2(cap, pose_video), content_type='multipart/x-mixed-replace; boundary=frame')
+        response = StreamingHttpResponse(await generate_frames2(cap, pose_video), content_type='multipart/x-mixed-replace; boundary=frame')
 
         # Release the video capture device
         cap.release()
