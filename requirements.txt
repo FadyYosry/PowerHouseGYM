@@ -8,11 +8,13 @@ contourpy==1.0.7
 cycler==0.11.0
 debugpy==1.6.7
 decorator==5.1.1
+dj-database-url==2.0.0
 Django==4.1.7
 djangorestframework==3.14.0
 executing==1.2.0
 flatbuffers==23.3.3
 fonttools==4.39.2
+gunicorn==20.1.0
 ipykernel==6.22.0
 ipython==8.12.0
 jedi==0.18.2
@@ -48,4 +50,5 @@ sqlparse==0.4.3
 stack-data==0.6.2
 tornado==6.2
 traitlets==5.9.0
+typing_extensions==4.5.0
 wcwidth==0.2.6
