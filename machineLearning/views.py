@@ -246,3 +246,50 @@ def pose_classifier(request):
 
     else:
         return HttpResponse("Invalid request method.")
+
+@csrf_exempt
+async def classify_pose_real_time2(request):
+    if request.method == 'GET':
+        # Start capturing video from the camera
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            return HttpResponseBadRequest('Failed to open video capture from this device.')
+
+        # Initialize pose detection and classification models
+        pose_video = mp.solutions.pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
+
+        # Set up the response headers
+        response = StreamingHttpResponse(generate_frames2(cap, pose_video), content_type='multipart/x-mixed-replace; boundary=frame')
+
+        # Release the video capture device
+        cap.release()
+
+        # Return the response
+        return response
+    else:
+        return HttpResponseNotAllowed(['GET'])
+
+
+async def generate_frames2(cap, pose_video):
+    while True:
+        # Read a new frame from the camera
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # Detect the pose and classify it
+        output_image, landmarks = await detectPose(frame, pose_video)
+        if landmarks:
+            output_image, label = await classifyPose(landmarks, output_image)
+        else:
+            label = 'No Pose Detected'
+
+        # Encode the output image as a JPEG and yield it as a response
+        _, jpeg = cv2.imencode('.jpg', output_image)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n'
+               b'Content-Length: ' + str(len(jpeg)).encode() + b'\r\n'
+               b'\r\n' + jpeg.tobytes() + b'\r\n')
+
+    # Release the video capture device
+    cap.release()
