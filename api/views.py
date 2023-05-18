@@ -89,26 +89,26 @@ def login_viewV2(request):
                 try:
                     member = Member.objects.get(email=username_or_email)
                 except Member.DoesNotExist:
-                    return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+                    return JsonResponse({'status': 'false', 'message': 'Email not Found!'})
 
         # If input is not an email, lookup by username
         if not member:
             try:
                 member = Member.objects.get(username=username_or_email)
             except Member.DoesNotExist:
-                return JsonResponse({'status': 'failed', 'message': 'Invalid credentials username', 'username' : username_or_email})
+                return JsonResponse({'status': 'false', 'message': 'Invalid credentials username', 'username' : username_or_email})
 
         if not member:
-            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+            return JsonResponse({'status': 'false', 'message': 'Invalid credentials'})
 
         # If member is found, check password and log in
         if member.check_password(password):
             login(request, member)
-            return JsonResponse({'status': 'success', 'user': member.first_name})
+            return JsonResponse({'status': 'true', 'message': 'Login successfully'  , 'user': member.first_name})
         else:
-            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
+            return JsonResponse({'status': 'false', 'message': 'Password is not correct!'})
     else:
-        return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
+        return JsonResponse({'status': 'false ', 'message': 'Invalid request method'})
 
         
 # Viwes for GYM
