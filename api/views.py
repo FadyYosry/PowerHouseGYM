@@ -59,7 +59,6 @@ def get_gym_member(request, pk=None, username=None):
     serializer = MemberSerializer(member)
     return Response(serializer.data)
     
-# V2 for login
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
