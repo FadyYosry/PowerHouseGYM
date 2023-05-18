@@ -58,26 +58,10 @@ def get_gym_member(request, pk=None, username=None):
         return Response({'error': 'Either pk or username must be provided'}, status=400)
     serializer = MemberSerializer(member)
     return Response(serializer.data)
-
-@csrf_exempt
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        try:
-            member = Member.objects.get(username=username)
-        except Member.DoesNotExist:
-            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
-        if not member.check_password(password):
-            return JsonResponse({'status': 'failed', 'message': 'Invalid credentials'})
-        login(request, member)
-        return JsonResponse({'status': 'success', 'user': member.first_name})
-    else:
-        return JsonResponse({'status': 'failed', 'message': 'Invalid request method'})
     
 # V2 for login
 @csrf_exempt
-def login_viewV2(request):
+def login_view(request):
     if request.method == 'POST':
         username_or_email = request.POST.get('username_or_email')
         password = request.POST.get('password')

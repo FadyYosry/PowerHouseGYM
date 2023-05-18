@@ -1,7 +1,6 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import *
-# from rest_framework import views
 
 urlpatterns = [
     # Authentication
@@ -17,8 +16,7 @@ urlpatterns = [
     path('members/get/<str:username>/', get_gym_member, name='get-member'),
     path('members/update/<int:pk>/', update_gym_member, name='member-update'),
     path('members/delete/<int:pk>/', delete_gym_member, name='member-delete'),
-    # path('login/', login_view, name='login'),
-    path('login/', login_viewV2, name='login2'),
+    path('login/', login_view, name='login'),
 
     # Add GYM
     path('gym/', list_gym, name='list_gym'),
