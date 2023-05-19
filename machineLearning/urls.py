@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import capture_frames,face_detection, classifyPose ,classify_pose_real_time , stream_camera, pose_classifier, classify_pose_real_time2
+from .views import capture_frames,face_detection, classifyPose ,stream_camera, pose_classifier
 
 urlpatterns = [
     path('stream_camera/', stream_camera, name='stream_camera'),
