@@ -16,8 +16,17 @@ def create_gym_member(request):
     serializer = MemberSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'status':'true'}, serializer.data, status=status.HTTP_201_CREATED)
-    return Response({'status':'false'}, serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        response_data = {
+            'status': True,
+            'data': serializer.data
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
+    response_data = {
+        'status': False,
+        'errors': serializer.errors
+    }
+    return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['PUT'])
 def update_gym_member(request, pk):
