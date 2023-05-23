@@ -64,8 +64,6 @@ class Member(AbstractBaseUser):
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     gym = models.ForeignKey(Gym, on_delete=models.SET('Unknown'))
-    membership_start_date = models.DateField()
-    membership_end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
