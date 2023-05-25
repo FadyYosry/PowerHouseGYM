@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, DecimalValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 class Admin(models.Model):
     first_name = models.CharField(max_length=100)
@@ -50,26 +51,30 @@ class Member(AbstractBaseUser):
     height = models.DecimalField(max_digits=6, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
     weight = models.DecimalField(max_digits=5, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
     target = models.DecimalField(max_digits=5, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
-    ]
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128, blank=False, null=False)
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    zip_code = models.CharField(max_length=10, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    gym = models.ForeignKey(Gym, on_delete=models.SET('Unknown'))
+    gym_name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
    
     def save(self, *args, **kwargs):
         # Hash the password before saving the user object
         self.password = make_password(self.password)
+        try:
+            # Search for the gym in the Gym table
+            gym = Gym.objects.get(name=self.gym_name)
+        except ObjectDoesNotExist:
+            # If the gym doesn't exist, create a new gym entry
+            gym = Gym(name=self.gym_name)
+            gym.save()
+        # Set the gym foreign key to the found or created gym
+        self.gym = gym
+        # Call the parent class's save method
         super(Member, self).save(*args, **kwargs)
 
     def __str__(self):
