@@ -13,6 +13,6 @@ class MemberSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['gym'] = instance.gym.name
+        data['gym_name'] = instance.gym.name
         return data
 
