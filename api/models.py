@@ -63,6 +63,8 @@ class Member(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
    
     def save(self, *args, **kwargs):
+        # Convert email to lowercase
+        self.email = self.email.lower()  
         # Hash the password before saving the user object
         self.password = make_password(self.password)
         try:
