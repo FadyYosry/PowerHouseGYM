@@ -46,7 +46,7 @@ class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=50, unique=True)
-    USERNAME_FIELD = 'username'
+    # USERNAME_FIELD = 'username'
     age = models.PositiveIntegerField(blank=True, null=True)
     height = models.DecimalField(max_digits=6, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
     weight = models.DecimalField(max_digits=5, decimal_places=2, default='0.00', validators=[MaxValueValidator(999.99), DecimalValidator(max_digits=5, decimal_places=2)])
