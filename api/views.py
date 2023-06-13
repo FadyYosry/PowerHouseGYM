@@ -96,7 +96,7 @@ def login_view(request):
         # If member is found, check password and log in
         if member.check_password(password):
             login(request, member)
-            return JsonResponse({'status': 'true', 'message': 'Login successfully'  , 'user': member.first_name})
+            return JsonResponse({'status': 'true', 'message': 'Login successfully'  , 'user': member.first_name, 'id': member.id})
         else:
             return JsonResponse({'status': 'false', 'message': 'Password is not correct!'})
     else:
