@@ -57,16 +57,24 @@ def list_gym_members(request):
     serializer = MemberSerializer(members, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def get_gym_member(request, pk=None, username=None):
+@api_view(['POST'])
+def get_gym_member(request):
+    data = request.data
+
+    pk = data.get('id')
+    username = data.get('username')
+
     if pk is not None:
         member = get_object_or_404(Member, pk=pk)
     elif username is not None:
         member = get_object_or_404(Member, username=username)
     else:
         return Response({'error': 'Either pk or username must be provided'}, status=400)
+
     serializer = MemberSerializer(member)
     return Response(serializer.data)
+
+
     
 @csrf_exempt
 def login_view(request):
