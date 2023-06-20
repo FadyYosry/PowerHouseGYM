@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     # local
     'api.apps.ApiConfig',
-    'machineLearning.apps.MachinelearningConfig'
 ]
 
 REST_FRAMEWORK = { 

@@ -6,9 +6,6 @@ urlpatterns = [
     # Authentication
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 
-    # User Registration
-    # path('register/', RegisterUser.as_view(), name='register'),
-
     # Gym Members
     path('members/', list_gym_members, name='list_gym_members'),
     path('members/create/', create_gym_member, name='member-create'),

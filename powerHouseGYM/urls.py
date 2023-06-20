@@ -5,7 +5,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
-    path('machine/',include('machineLearning.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
