@@ -39,7 +39,7 @@ def update_gym_member(request):
     except Member.DoesNotExist:
         return Response({'error': 'Member not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = MemberSerializer(member, data=request.data)
+    serializer = MemberSerializer(member, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

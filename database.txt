@@ -1,0 +1,1 @@
+export DATABASE_URL=postgres://powergym_9dpa_user:DlpHdnvrFshr809AT1jfBA69Of8nvGSs@dpg-chnhq2u4dad1d52v24rg-a.frankfurt-postgres.render.com/powergym_9dpa
