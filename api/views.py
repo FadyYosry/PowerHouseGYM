@@ -29,11 +29,15 @@ def create_gym_member(request):
 
 
 @api_view(['PUT'])
-def update_gym_member(request, pk):
+def update_gym_member(request):
+    pk = request.data.get('id')  # Assuming 'id' is the parameter name in the request body
+    if not pk:
+        return Response({'error': 'ID parameter is missing in the request body.'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
         member = Member.objects.get(pk=pk)
     except Member.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Member not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = MemberSerializer(member, data=request.data)
     if serializer.is_valid():
